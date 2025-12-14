@@ -1,0 +1,12 @@
+# .env и прочие файлы с секретами
+.env
+.env.*
+
+# Пример (оставляем в git)
+!.env.example
+
+# IDE и редакторы
+.vscode/
+.idea/
+.claude/
+CLAUDE.md
