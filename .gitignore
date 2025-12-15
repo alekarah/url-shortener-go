@@ -1,12 +1,46 @@
-# .env и прочие файлы с секретами
+# Переменные окружения и секреты
 .env
 .env.*
-
-# Пример (оставляем в git)
 !.env.example
+
+# Бинарные файлы Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/bin/
+/dist/
+
+# Тестовые бинарники
+*.test
+
+# Покрытие кода
+*.out
+coverage.txt
+coverage.html
+
+# Зависимости Go
+/vendor/
 
 # IDE и редакторы
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.DS_Store
 .claude/
 CLAUDE.md
+
+# Логи
+*.log
+
+# Временные файлы
+tmp/
+temp/
+*.tmp
+
+# OS файлы
+Thumbs.db
+.DS_Store
