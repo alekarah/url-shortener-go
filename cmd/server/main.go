@@ -73,8 +73,18 @@ func main() {
 	r.Use(chimiddleware.Recoverer)
 	r.Use(chimiddleware.Timeout(60 * time.Second))
 
+	// Статические файлы
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "static/index.html")
+	})
+	r.Get("/links", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "static/links.html")
+	})
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
 	// API routes
 	r.Route("/api/v1", func(r chi.Router) {
+		r.Get("/urls", urlHandler.GetAllURLs)
 		r.Post("/urls", urlHandler.CreateShortURL)
 		r.Get("/urls/{id}", urlHandler.GetURL)
 		r.Delete("/urls/{id}", urlHandler.DeleteURL)

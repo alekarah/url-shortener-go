@@ -86,6 +86,37 @@ func (h *URLHandler) DeleteURL(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// GetAllURLs получает список всех URL
+// GET /api/v1/urls
+func (h *URLHandler) GetAllURLs(w http.ResponseWriter, r *http.Request) {
+	// Получаем параметры пагинации из query string
+	limitStr := r.URL.Query().Get("limit")
+	offsetStr := r.URL.Query().Get("offset")
+
+	limit := 50 // по умолчанию
+	offset := 0
+
+	if limitStr != "" {
+		if l, err := strconv.Atoi(limitStr); err == nil {
+			limit = l
+		}
+	}
+
+	if offsetStr != "" {
+		if o, err := strconv.Atoi(offsetStr); err == nil {
+			offset = o
+		}
+	}
+
+	urls, err := h.urlService.GetAllURLs(r.Context(), limit, offset)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Ошибка получения списка URL")
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, urls)
+}
+
 // respondWithJSON отправляет JSON ответ
 func respondWithJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")

@@ -17,6 +17,7 @@ type URLService interface {
 	GetOriginalURL(ctx context.Context, shortCode string) (string, error)
 	GetURLByShortCode(ctx context.Context, shortCode string) (*models.URL, error)
 	GetURLByID(ctx context.Context, id int64) (*models.URLResponse, error)
+	GetAllURLs(ctx context.Context, limit, offset int) ([]*models.URLResponse, error)
 	DeleteURL(ctx context.Context, id int64) error
 	IncrementClicks(ctx context.Context, id int64) error
 }
@@ -185,6 +186,42 @@ func (s *urlService) GetURLByID(ctx context.Context, id int64) (*models.URLRespo
 	}
 
 	return response, nil
+}
+
+// GetAllURLs получает список всех URL с пагинацией
+func (s *urlService) GetAllURLs(ctx context.Context, limit, offset int) ([]*models.URLResponse, error) {
+	// Устанавливаем разумные лимиты
+	if limit <= 0 || limit > 100 {
+		limit = 50
+	}
+	if offset < 0 {
+		offset = 0
+	}
+
+	urls, err := s.urlRepo.GetAll(ctx, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	responses := make([]*models.URLResponse, 0, len(urls))
+	for _, url := range urls {
+		response := &models.URLResponse{
+			ID:          url.ID,
+			ShortCode:   url.ShortCode,
+			ShortURL:    fmt.Sprintf("%s/%s", s.baseURL, url.ShortCode),
+			OriginalURL: url.OriginalURL,
+			CreatedAt:   url.CreatedAt,
+			ClicksCount: url.ClicksCount,
+		}
+
+		if url.ExpiresAt.Valid {
+			response.ExpiresAt = &url.ExpiresAt.Time
+		}
+
+		responses = append(responses, response)
+	}
+
+	return responses, nil
 }
 
 // GetURLByShortCode получает полный объект URL по короткому коду

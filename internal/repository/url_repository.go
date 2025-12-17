@@ -13,6 +13,7 @@ type URLRepository interface {
 	Create(ctx context.Context, url *models.URL) error
 	GetByShortCode(ctx context.Context, shortCode string) (*models.URL, error)
 	GetByID(ctx context.Context, id int64) (*models.URL, error)
+	GetAll(ctx context.Context, limit, offset int) ([]*models.URL, error)
 	Update(ctx context.Context, url *models.URL) error
 	Delete(ctx context.Context, id int64) error
 	IncrementClicks(ctx context.Context, id int64) error
@@ -113,6 +114,47 @@ func (r *urlRepository) GetByID(ctx context.Context, id int64) (*models.URL, err
 	}
 
 	return url, nil
+}
+
+// GetAll получает список всех URL с пагинацией
+func (r *urlRepository) GetAll(ctx context.Context, limit, offset int) ([]*models.URL, error) {
+	query := `
+		SELECT id, short_code, original_url, created_at, expires_at, user_id, clicks_count, last_clicked_at
+		FROM urls
+		ORDER BY created_at DESC
+		LIMIT $1 OFFSET $2
+	`
+
+	rows, err := r.db.QueryContext(ctx, query, limit, offset)
+	if err != nil {
+		return nil, fmt.Errorf("ошибка получения списка URL: %w", err)
+	}
+	defer rows.Close()
+
+	var urls []*models.URL
+	for rows.Next() {
+		url := &models.URL{}
+		err := rows.Scan(
+			&url.ID,
+			&url.ShortCode,
+			&url.OriginalURL,
+			&url.CreatedAt,
+			&url.ExpiresAt,
+			&url.UserID,
+			&url.ClicksCount,
+			&url.LastClickedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("ошибка сканирования URL: %w", err)
+		}
+		urls = append(urls, url)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("ошибка итерации по результатам: %w", err)
+	}
+
+	return urls, nil
 }
 
 // Update обновляет URL
