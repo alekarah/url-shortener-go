@@ -1,0 +1,67 @@
+services:
+  # Web Service - Go приложение
+  - type: web
+    name: url-shortener
+    env: docker
+    region: oregon # Можно выбрать: oregon, frankfurt, singapore
+    plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      # PostgreSQL (подключается к Neon.tech)
+      - key: POSTGRES_HOST
+        sync: false
+      - key: POSTGRES_PORT
+        value: 5432
+      - key: POSTGRES_USER
+        sync: false
+      - key: POSTGRES_PASSWORD
+        sync: false
+      - key: POSTGRES_DB
+        sync: false
+      - key: POSTGRES_SSLMODE
+        value: require
+
+      # Redis (подключается к Render Redis)
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: url-shortener-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: url-shortener-redis
+          property: port
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: url-shortener-redis
+          property: connectionString
+      - key: REDIS_DB
+        value: 0
+
+      # Server настройки
+      - key: SERVER_HOST
+        value: 0.0.0.0
+      - key: SERVER_PORT
+        value: 8080
+      - key: BASE_URL
+        sync: false # Будет YOUR_APP_URL.onrender.com
+
+      # Cache
+      - key: CACHE_TTL
+        value: 3600
+
+      # Environment
+      - key: ENV
+        value: production
+
+  # Redis
+  - type: redis
+    name: url-shortener-redis
+    region: oregon
+    plan: free # 512 MB бесплатно
+    ipAllowList: [] # Разрешить доступ со всех IP
+    maxmemoryPolicy: allkeys-lru # Удалять старые ключи при заполнении

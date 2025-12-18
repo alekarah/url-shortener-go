@@ -1,0 +1,43 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Файлы окружения
+.env
+.env.local
+
+# Документация
+README.md
+*.md
+
+# CI/CD
+.github
+
+# Тесты
+*_test.go
+
+# Временные файлы
+*.log
+tmp/
+temp/
+
+# Бинарники
+main
+server
+*.exe
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Bash скрипты разработки
+check-code.sh
