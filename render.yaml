@@ -35,10 +35,7 @@ services:
           name: url-shortener-redis
           property: port
       - key: REDIS_PASSWORD
-        fromService:
-          type: redis
-          name: url-shortener-redis
-          property: connectionString
+        value: "" # Бесплатный Redis на Render без пароля
       - key: REDIS_DB
         value: 0
 
