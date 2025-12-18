@@ -7,7 +7,7 @@ services:
     plan: free
     branch: main
     dockerfilePath: ./Dockerfile
-    healthCheckPath: /
+    healthCheckPath: /health
     envVars:
       # PostgreSQL (подключается к Neon.tech)
       - key: POSTGRES_HOST
