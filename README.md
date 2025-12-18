@@ -271,6 +271,26 @@ curl http://localhost:8080/api/v1/urls/1/stats
 http://localhost:8080/github
 ```
 
+## Тестирование
+
+```bash
+# Запустить тесты
+go test ./... -v
+
+# С покрытием
+go test ./... -cover
+```
+
+**Покрытие:**
+- `pkg/shortener` - 72.5% (генератор Base62, валидация)
+- `internal/service` - 19.2% (бизнес-логика)
+- `internal/handlers` - 18.6% (HTTP endpoints)
+
+**33 теста** включают:
+- Unit тесты: генерация кодов, уникальность, валидация
+- Service тесты: создание ссылок, дубликаты, пагинация
+- Integration тесты: POST/GET/DELETE endpoints, обработка ошибок
+
 ## База данных
 
 ### Схема

@@ -2,6 +2,7 @@ package shortener
 
 import (
 	"crypto/rand"
+	"fmt"
 	"math/big"
 )
 
@@ -25,7 +26,7 @@ func NewGenerator() Generator {
 // Generate генерирует случайный короткий код заданной длины
 func (g *generator) Generate(length int) (string, error) {
 	if length <= 0 {
-		length = 7 // значение по умолчанию
+		return "", fmt.Errorf("длина должна быть больше 0")
 	}
 
 	result := make([]byte, length)
@@ -82,19 +83,21 @@ func DecodeToID(encoded string) int64 {
 
 // IsValidShortCode проверяет, что короткий код содержит только допустимые символы
 func IsValidShortCode(code string) bool {
-	if len(code) == 0 {
+	if len(code) == 0 || len(code) > 50 {
 		return false
 	}
 
 	for _, char := range code {
-		found := false
+		// Разрешены: Base62 символы, дефис и подчеркивание
+		isBase62 := false
 		for _, validChar := range base62Chars {
 			if char == validChar {
-				found = true
+				isBase62 = true
 				break
 			}
 		}
-		if !found {
+
+		if !isBase62 && char != '-' && char != '_' {
 			return false
 		}
 	}
