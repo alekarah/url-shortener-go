@@ -51,7 +51,8 @@ type AppConfig struct {
 // Load загружает конфигурацию из .env файла и переменных окружения
 func Load() (*Config, error) {
 	// Загружаем .env файл (игнорируем ошибку если файла нет)
-	_ = godotenv.Load()
+	// В production .env может отсутствовать (переменные задаются напрямую)
+	godotenv.Load() // nolint:errcheck
 
 	config := &Config{
 		Server: ServerConfig{

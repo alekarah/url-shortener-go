@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v8"
+
 	"url-short/internal/models"
 	"url-short/internal/repository"
 	"url-short/pkg/shortener"
@@ -111,10 +112,10 @@ func (s *urlService) CreateShortURL(ctx context.Context, req *models.CreateURLRe
 		return nil, fmt.Errorf("ошибка создания URL: %w", err)
 	}
 
-	// Кешируем в Redis
+	// Кешируем в Redis (игнорируем ошибку кеширования, основные данные уже в БД)
 	if s.redis != nil {
 		cacheKey := fmt.Sprintf("url:%s", shortCode)
-		_ = s.redis.Set(ctx, cacheKey, url.OriginalURL, s.cacheTTL).Err()
+		s.redis.Set(ctx, cacheKey, url.OriginalURL, s.cacheTTL) // nolint:errcheck
 	}
 
 	// Формируем ответ
@@ -156,10 +157,10 @@ func (s *urlService) GetOriginalURL(ctx context.Context, shortCode string) (stri
 		return "", fmt.Errorf("ссылка истекла")
 	}
 
-	// Кешируем в Redis
+	// Кешируем в Redis (игнорируем ошибку кеширования)
 	if s.redis != nil {
 		cacheKey := fmt.Sprintf("url:%s", shortCode)
-		_ = s.redis.Set(ctx, cacheKey, url.OriginalURL, s.cacheTTL).Err()
+		s.redis.Set(ctx, cacheKey, url.OriginalURL, s.cacheTTL) // nolint:errcheck
 	}
 
 	return url.OriginalURL, nil
@@ -257,10 +258,10 @@ func (s *urlService) DeleteURL(ctx context.Context, id int64) error {
 		return err
 	}
 
-	// Удаляем из кеша
+	// Удаляем из кеша (игнорируем ошибку)
 	if s.redis != nil {
 		cacheKey := fmt.Sprintf("url:%s", url.ShortCode)
-		_ = s.redis.Del(ctx, cacheKey).Err()
+		s.redis.Del(ctx, cacheKey) // nolint:errcheck
 	}
 
 	return nil
