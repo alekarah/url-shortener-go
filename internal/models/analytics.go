@@ -29,11 +29,11 @@ type ClickEvent struct {
 
 // URLStats статистика по URL
 type URLStats struct {
-	TotalClicks   int64                `json:"total_clicks"`
-	UniqueIPs     int64                `json:"unique_ips"`
-	ClicksByDate  []ClicksByDate       `json:"clicks_by_date"`
+	TotalClicks     int64             `json:"total_clicks"`
+	UniqueIPs       int64             `json:"unique_ips"`
+	ClicksByDate    []ClicksByDate    `json:"clicks_by_date"`
 	ClicksByCountry []ClicksByCountry `json:"clicks_by_country"`
-	RecentClicks  []Analytics          `json:"recent_clicks"`
+	RecentClicks    []Analytics       `json:"recent_clicks"`
 }
 
 // ClicksByDate клики по датам

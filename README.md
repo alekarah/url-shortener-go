@@ -1,5 +1,7 @@
 # URL Shortener (Go)
 
+[![CI](https://github.com/alekarah/url-shortener-go/actions/workflows/ci.yml/badge.svg)](https://github.com/alekarah/url-shortener-go/actions/workflows/ci.yml)
+
 Сервис для сокращения URL с аналитикой кликов, написанный на Go.
 
 ## Возможности
@@ -279,6 +281,9 @@ go test ./... -v
 
 # С покрытием
 go test ./... -cover
+
+# Проверка перед push (тесты + форматирование + линтер)
+./check-code.sh
 ```
 
 **Покрытие:**
@@ -396,7 +401,7 @@ Redis используется для кеширования маппинга `s
 - [ ] Редактирование ссылок (изменение original_url)
 
 ### DevOps
-- [ ] CI/CD pipeline (GitHub Actions)
+- [x] CI/CD pipeline (GitHub Actions)
 - [ ] Docker production образ
 - [ ] Мониторинг (Prometheus + Grafana)
 - [ ] Логирование в файлы/Loki

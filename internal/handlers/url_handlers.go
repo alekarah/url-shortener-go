@@ -121,7 +121,10 @@ func (h *URLHandler) GetAllURLs(w http.ResponseWriter, r *http.Request) {
 func respondWithJSON(w http.ResponseWriter, statusCode int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
-	json.NewEncoder(w).Encode(data)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		// Логируем ошибку, но не можем изменить статус код (уже отправлен)
+		println("Ошибка кодирования JSON:", err.Error())
+	}
 }
 
 // respondWithError отправляет ошибку в JSON формате

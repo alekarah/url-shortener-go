@@ -1,0 +1,34 @@
+run:
+  timeout: 5m
+  tests: true
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    - errcheck      # Проверяет неиспользованные ошибки
+    - gosimple      # Упрощение кода
+    - govet         # Стандартный Go vet
+    - ineffassign   # Неэффективные присваивания
+    - staticcheck   # Продвинутые проверки
+    - unused        # Неиспользуемый код
+    - gofmt         # Форматирование
+    - goimports     # Импорты
+    - misspell      # Опечатки в комментариях
+    - revive        # Замена golint
+
+linters-settings:
+  errcheck:
+    check-blank: true
+    check-type-assertions: true
+
+  revive:
+    rules:
+      - name: exported
+        disabled: true  # Не требуем комментарии для всех экспортируемых функций
+
+issues:
+  exclude-rules:
+    # Игнорируем ошибки defer в тестах
+    - path: _test\.go
+      linters:
+        - errcheck

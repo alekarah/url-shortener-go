@@ -34,7 +34,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Ошибка подключения к PostgreSQL: %v", err)
 	}
-	defer database.CloseDB(db)
+	defer func() {
+		if err := database.CloseDB(db); err != nil {
+			log.Printf("Ошибка закрытия PostgreSQL: %v", err)
+		}
+	}()
 	log.Println("✓ Подключено к PostgreSQL")
 
 	// Подключаемся к Redis
@@ -46,7 +50,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Ошибка подключения к Redis: %v", err)
 	}
-	defer database.CloseRedis(redisClient)
+	defer func() {
+		if err := database.CloseRedis(redisClient); err != nil {
+			log.Printf("Ошибка закрытия Redis: %v", err)
+		}
+	}()
 	log.Println("✓ Подключено к Redis")
 
 	// Инициализируем repositories
