@@ -106,8 +106,8 @@ func main() {
 		r.Get("/urls/{id}/stats", analyticsHandler.GetURLStats)
 	})
 
-	// Redirect route (должен быть последним)
-	r.Get("/{shortCode}", redirectHandler.Redirect)
+	// Redirect route - используем query параметр для обхода ограничений Render
+	r.Get("/go", redirectHandler.Redirect)
 
 	// Настраиваем сервер
 	server := &http.Server{

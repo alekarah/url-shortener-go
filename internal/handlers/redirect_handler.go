@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/go-chi/chi/v5"
-
 	"url-short/internal/service"
 )
 
@@ -28,9 +26,10 @@ func NewRedirectHandler(
 }
 
 // Redirect выполняет редирект на оригинальный URL
-// GET /{shortCode}
+// GET /go?code={shortCode}
 func (h *RedirectHandler) Redirect(w http.ResponseWriter, r *http.Request) {
-	shortCode := chi.URLParam(r, "shortCode")
+	// Читаем shortCode из query параметра вместо path параметра
+	shortCode := r.URL.Query().Get("code")
 
 	if shortCode == "" {
 		http.Error(w, "Короткий код не указан", http.StatusBadRequest)
