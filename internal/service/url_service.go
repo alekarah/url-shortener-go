@@ -122,7 +122,7 @@ func (s *urlService) CreateShortURL(ctx context.Context, req *models.CreateURLRe
 	response := &models.URLResponse{
 		ID:          url.ID,
 		ShortCode:   url.ShortCode,
-		ShortURL:    fmt.Sprintf("%s/go?code=%s", s.baseURL, url.ShortCode),
+		ShortURL:    fmt.Sprintf("%s/api/r?code=%s", s.baseURL, url.ShortCode),
 		OriginalURL: url.OriginalURL,
 		CreatedAt:   url.CreatedAt,
 		ClicksCount: url.ClicksCount,
@@ -176,7 +176,7 @@ func (s *urlService) GetURLByID(ctx context.Context, id int64) (*models.URLRespo
 	response := &models.URLResponse{
 		ID:          url.ID,
 		ShortCode:   url.ShortCode,
-		ShortURL:    fmt.Sprintf("%s/go?code=%s", s.baseURL, url.ShortCode),
+		ShortURL:    fmt.Sprintf("%s/api/r?code=%s", s.baseURL, url.ShortCode),
 		OriginalURL: url.OriginalURL,
 		CreatedAt:   url.CreatedAt,
 		ClicksCount: url.ClicksCount,
@@ -209,7 +209,7 @@ func (s *urlService) GetAllURLs(ctx context.Context, limit, offset int) ([]*mode
 		response := &models.URLResponse{
 			ID:          url.ID,
 			ShortCode:   url.ShortCode,
-			ShortURL:    fmt.Sprintf("%s/go?code=%s", s.baseURL, url.ShortCode),
+			ShortURL:    fmt.Sprintf("%s/api/r?code=%s", s.baseURL, url.ShortCode),
 			OriginalURL: url.OriginalURL,
 			CreatedAt:   url.CreatedAt,
 			ClicksCount: url.ClicksCount,

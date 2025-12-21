@@ -106,8 +106,8 @@ func main() {
 		r.Get("/urls/{id}/stats", analyticsHandler.GetURLStats)
 	})
 
-	// Redirect route - используем query параметр для обхода ограничений Render
-	r.Get("/go", redirectHandler.Redirect)
+	// Redirect route - внутри /api/ namespace для обхода ограничений Render
+	r.Get("/api/r", redirectHandler.Redirect)
 
 	// Настраиваем сервер
 	server := &http.Server{

@@ -26,7 +26,7 @@ func NewRedirectHandler(
 }
 
 // Redirect выполняет редирект на оригинальный URL
-// GET /go?code={shortCode}
+// GET /api/r?code={shortCode}
 func (h *RedirectHandler) Redirect(w http.ResponseWriter, r *http.Request) {
 	// Читаем shortCode из query параметра вместо path параметра
 	shortCode := r.URL.Query().Get("code")
