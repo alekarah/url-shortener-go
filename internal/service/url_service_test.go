@@ -133,8 +133,8 @@ func TestCreateShortURL_Success(t *testing.T) {
 		t.Errorf("CreateShortURL() OriginalURL = %s, want https://example.com", result.OriginalURL)
 	}
 
-	if result.ShortURL != "http://localhost:8080/ABC123" {
-		t.Errorf("CreateShortURL() ShortURL = %s, want http://localhost:8080/ABC123", result.ShortURL)
+	if result.ShortURL != "http://localhost:8080/api/r?code=ABC123" {
+		t.Errorf("CreateShortURL() ShortURL = %s, want http://localhost:8080/api/r?code=ABC123", result.ShortURL)
 	}
 }
 
